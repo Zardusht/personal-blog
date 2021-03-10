@@ -288,4 +288,24 @@
     .footer {
         font-size: 24px;
     }
+    .info ul li {
+        font-size: 14px;
+    }
+    .info ul li span:first-child  {
+        font-size: 14px;
+        width: 120px;
+    }
+    .info h1 {
+        text-align: center;
+    }
+    .info p {
+        text-align: center;
+        padding: 20px;
+    }
+    .partners {
+        height: auto;
+        padding: 20px 0;
+        box-sizing: border-box;
+
+    }
   }
