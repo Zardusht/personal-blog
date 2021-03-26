@@ -1,8 +1,4 @@
-$(".navbar-toggler").click(function(){
-    $(".collapse").slideToggle("slow")
-});
-
-
+//для меню в скролинге
 $(window).scroll(function() {    
     var scroll = $(window).scrollTop();
 
@@ -12,3 +8,210 @@ $(window).scroll(function() {
         $(".navbar").removeClass("header_fixed");
     }
 });
+
+//для анимации перечисления кто я
+var TxtRotate = function(el, toRotate, period) {
+    this.toRotate = toRotate;
+    this.el = el;
+    this.loopNum = 0;
+    this.period = parseInt(period, 10) || 2000;
+    this.txt = '';
+    this.tick();
+    this.isDeleting = false;
+  };
+  
+  TxtRotate.prototype.tick = function() {
+    var i = this.loopNum % this.toRotate.length;
+    var fullTxt = this.toRotate[i];
+  
+    if (this.isDeleting) {
+      this.txt = fullTxt.substring(0, this.txt.length - 1);
+    } else {
+      this.txt = fullTxt.substring(0, this.txt.length + 1);
+    }
+  
+    this.el.innerHTML = '<span class="wrap">'+this.txt+'</span>';
+  
+    var that = this;
+    var delta = 300 - Math.random() * 100;
+  
+    if (this.isDeleting) { delta /= 2; }
+  
+    if (!this.isDeleting && this.txt === fullTxt) {
+      delta = this.period;
+      this.isDeleting = true;
+    } else if (this.isDeleting && this.txt === '') {
+      this.isDeleting = false;
+      this.loopNum++;
+      delta = 500;
+    }
+  
+    setTimeout(function() {
+      that.tick();
+    }, delta);
+  };
+  
+  window.onload = function() {
+    var elements = document.getElementsByClassName('txt-rotate');
+    for (var i=0; i<elements.length; i++) {
+      var toRotate = elements[i].getAttribute('data-rotate');
+      var period = elements[i].getAttribute('data-period');
+      if (toRotate) {
+        new TxtRotate(elements[i], JSON.parse(toRotate), period);
+      }
+    }
+    // INJECT CSS
+    var css = document.createElement("style");
+    css.type = "text/css";
+    css.innerHTML = ".txt-rotate > .wrap { border-right: 0.08em solid #666 }";
+    document.body.appendChild(css);
+  };
+
+//для стрелки
+$('.mouse-icon').click(function(){
+    $('html,body').animate({
+        scrollTop: $('.resume').offset().top
+    }, 500);
+});
+
+//для анкора
+var onePageClick = function() {
+
+
+    $(document).on('click', '#ftco-nav a[href^="#"]', function (event) {
+    event.preventDefault();
+
+    var href = $.attr(this, 'href');
+
+    $('html, body').animate({
+        scrollTop: $($.attr(this, 'href')).offset().top - 70
+    }, 500, function() {
+        // window.location.hash = href;
+    });
+    });
+    $(document).on('click', '.navi a[href^="#"]', function (event) {
+        event.preventDefault();
+    
+        var href = $.attr(this, 'href');
+    
+        $('html, body').animate({
+            scrollTop: $($.attr(this, 'href')).offset().top - 70
+        }, 500, function() {
+            // window.location.hash = href;
+        });
+        });
+
+};
+
+onePageClick();
+
+//для анимации резюме подразделов
+
+(function($){
+  //variable that will hold the href attr of the links in the menu
+  var sections = [];
+  //variable that stores the id of the section
+  var id = false;
+  //variable for the selection of the anchors in the navbar
+  var $navbara = $('.navi a');
+  
+  $navbara.click(function(e){
+    //prevent the page from refreshing
+    e.preventDefault();
+    //set the top offset animation and speed
+    $('html, body').animate({
+      scrollTop: $($(this).attr('href')).offset().top - 180
+},500);
+    hash($(this).attr('href'));
+  });
+  
+  
+  
+  //select all the anchors in the navbar one after another
+  $navbara.each(function(){
+   // and adds them in the sections variable
+    sections.push($($(this).attr('href')));
+    
+  })
+  $(window).scroll(function(e){
+    // scrollTop retains the value of the scroll top with the reference at the middle of the page
+    var scrollTop = $(this).scrollTop() + ($(window).height()/2);
+    //cycle through the values in sections array
+    for (var i in sections) {
+      var section = sections[i];
+      //if scrollTop variable is bigger than the top offset of a section in the sections array then 
+      if (scrollTop > section.offset().top){
+        var scrolled_id = section.attr('id');
+      }
+    }
+    if (scrolled_id !== id) {
+      id = scrolled_id;
+      $($navbara).removeClass('current');
+      $('.navi a[href="#' + id + '"]').addClass('current'); 
+    }
+  })
+})(jQuery);
+
+
+//для анмации меню
+
+(function(a){
+  //variable that will hold the href attr of the links in the menu
+  var sections = [];
+  //variable that stores the id of the section
+  var id = false;
+  //variable for the selection of the anchors in the navbar
+  var $navbarb = $('.nav-item a');
+  var scroll = $(window).scrollTop();
+  $navbarb.click(function(e){
+    //prevent the page from refreshing
+    e.preventDefault();
+    //set the top offset animation and speed
+    $('html, body').animate({
+      scrollTop: $($(this).attr('href')).offset().top - 180
+},500);
+    hash($(this).attr('href'));
+  });
+  
+  
+  
+  //select all the anchors in the navbar one after another
+  $navbarb.each(function(){
+   // and adds them in the sections variable
+    sections.push($($(this).attr('href')));
+    
+  })
+  $(window).scroll(function(e){
+    // scrollTop retains the value of the scroll top with the reference at the middle of the page
+    var scrollTop = $(this).scrollTop() + ($(window).height()/2);
+    //cycle through the values in sections array
+    for (var i in sections) {
+      var section = sections[i];
+      //if scrollTop variable is bigger than the top offset of a section in the sections array then 
+      if (scrollTop > section.offset().top){
+        var scrolled_id = section.attr('id');
+      }
+    }
+    if (scrolled_id !== id) {
+      id = scrolled_id;
+      $($navbarb).removeClass('activ');
+      $('.nav-item a[href="#' + id + '"]').addClass('activ'); 
+      $('.home').removeClass('activ');
+    }
+  })
+})(jQuery);
+
+// var fullHeight = function() {
+
+//   $('.js-fullheight').css('height', $(window).height());
+//   $(window).resize(function(){
+//     $('.js-fullheight').css('height', $(window).height());
+//   });
+
+// };
+// fullHeight();
+
+
+
+
+
